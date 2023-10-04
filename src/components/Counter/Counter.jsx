@@ -1,34 +1,46 @@
 import { Component } from 'react';
-import { ButtonContainer, CustomSpan, btnIncDec } from './Counter.styled';
+import { ButtonContainer } from './Counter.styled';
+import { Value } from './Control/Value/Value';
+import { Control } from './Control/Control';
 
 class Counter extends Component {
   static defaultProps = {
     step: 1,
+    initialValue: 0,
+  };
+
+  state = {
+    value: this.props.initialValue,
   };
 
   handleIncrement = evt => {
-    console.log('Increment button was clicked!', evt); // працює
-    console.log('this.props: ', this.props); // працює
+    this.setState(prevState => {
+      return { value: prevState.value + this.props.step }; //оновлює значення в об'єкті
+    });
+    // this.setState({ value: 10 }); //перезапис всього об'єкту
   };
 
   handleDecrement = evt => {
-    console.log('Decrement button was clicked!', evt); // працює
-    console.log('this.props: ', this.props); // працює
+    this.setState(prevState => {
+      return { value: prevState.value - this.props.step }; //оновлює значення в об'єкті
+    });
   };
 
   render() {
     const { step } = this.props;
-
+    const { value } = this.state;
     return (
-      <ButtonContainer>
-        <CustomSpan>0</CustomSpan>
-        <button type="button" onClick={this.handleIncrement}>
-          Increment by {step}
-        </button>
-        <button type="button" onClick={this.handleDecrement}>
-          Decrement by {step}
-        </button>
-      </ButtonContainer>
+      <>
+        <ButtonContainer>
+          <Value value={value}></Value>
+
+          <Control
+            step={step}
+            onIncrement={this.handleIncrement}
+            OnDecrement={this.handleDecrement}
+          ></Control>
+        </ButtonContainer>
+      </>
     );
   }
 }
